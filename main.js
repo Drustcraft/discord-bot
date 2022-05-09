@@ -5,7 +5,8 @@ const token = process.env.token;
 const clientId = process.env.clientId;
 const nl = require("npmlog");
 const baseCommandModulePath = "./lib/commands/"
-const fs = require("fs")
+const fs = require("fs");
+const { config } = require('dotenv');
 
 const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS] });
 
@@ -31,14 +32,16 @@ client.on('warn', (string) => {
 	nl.verbose("Discord.JS Warning", string)
 })
 
-client.on('debug', (string) => {
-	nl.verbose("Discord.JS Debug", string)
-})
-
-client.on('apiRequest', (apir) => {
-	nl.verbose("Discord.JS HTTP", apir.method)
-	nl.verbose("Discord.JS HTTP", apir.path)
-})
+if (configJson.versionInfo.enviornment == 0) {
+	client.on('debug', (string) => {
+		nl.verbose("Discord.JS Debug", string)
+	})
+	
+	client.on('apiRequest', (apir) => {
+		nl.verbose("Discord.JS HTTP", apir.method)
+		nl.verbose("Discord.JS HTTP", apir.path)
+	})
+}
 
 client.on('error', (string) => {
 	nl.error("Discord.JS Error", string)
