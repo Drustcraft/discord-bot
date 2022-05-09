@@ -19,12 +19,10 @@ nl.heading = "Drustcraft Bot"
 client.once('ready', () => {
 	client.user.setActivity('www.drustcraft.com.au', { type: 'WATCHING' });
 	nl.info('Base Bot', `Ready.`);
-	if (!configJson.versionInfo.noStartAlert) {
-		if (configJson.versionInfo.enviornment == 0) {
-			client.channels.cache.get('963968336847327355').send('Ready, running on development environment!')
-		} else {
-			client.channels.cache.get('963968336847327355').send('Ready, running on production environment!')
-		}
+	if (configJson.versionInfo.debug == 1) {
+		client.channels.cache.get('963968336847327355').send('Ready, running on development environment!')
+	} else {
+		client.channels.cache.get('867337631678726194').send('Ready, running on production environment!')
 	}
 });
 
@@ -32,7 +30,7 @@ client.on('warn', (string) => {
 	nl.verbose("Discord.JS Warning", string)
 })
 
-if (configJson.versionInfo.environment == 0) {
+if (configJson.versionInfo.debug == 1) {
 	client.on('debug', (string) => {
 		nl.verbose("Discord.JS Debug", string)
 	})
