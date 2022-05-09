@@ -32,7 +32,7 @@ client.on('warn', (string) => {
 	nl.verbose("Discord.JS Warning", string)
 })
 
-if (configJson.versionInfo.enviornment == 0) {
+if (configJson.versionInfo.environment == 0) {
 	client.on('debug', (string) => {
 		nl.verbose("Discord.JS Debug", string)
 	})
