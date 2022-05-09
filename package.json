@@ -1,0 +1,21 @@
+{
+  "name": "dcjsbot",
+  "version": "1.0.0",
+  "description": "The Drustcraft Bot, written in Javascript.",
+  "main": "./main.js",
+  "scripts": {
+    "coldStart": "npm install && node regSlashCommands.js && node .",
+    "regsc": "node regSlashCommands.js",
+    "start": "node ."
+  },
+  "author": "[Project HSI] & The Drustcraft Team",
+  "license": "SEE LICENSE IN LICENSE",
+  "dependencies": {
+    "@discordjs/builders": "^0.13.0",
+    "@discordjs/rest": "^0.4.1",
+    "discord-api-types": "^0.31.1",
+    "discord.js": "^13.6.0",
+    "dotenv": "^16.0.0",
+    "npmlog": "^6.0.1"
+  }
+}
