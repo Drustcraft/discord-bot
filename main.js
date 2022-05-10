@@ -3,14 +3,14 @@ const Discord = require("discord.js")
 const configJson = require('./config.json');
 const token = process.env.token;
 const clientId = process.env.clientId;
-const nl = require("npmlog");
+const nl = require("./lib/log");
 const baseCommandModulePath = "./lib/commands/"
 const fs = require("fs");
 const { config } = require('dotenv');
 
 const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS] });
 
-if (configJson.versionInfo.enviornment == 0) {
+if (configJson.debug == 1) {
 	nl.level = Infinity
 }
 
@@ -19,10 +19,8 @@ nl.heading = "Drustcraft Bot"
 client.once('ready', () => {
 	client.user.setActivity('www.drustcraft.com.au', { type: 'WATCHING' });
 	nl.info('Base Bot', `Ready.`);
-	if (configJson.versionInfo.debug == 1) {
+	if (configJson.debug == 1) {
 		client.channels.cache.get('963968336847327355').send('Ready, running on development environment!')
-	} else {
-		client.channels.cache.get('867337631678726194').send('Ready, running on production environment!')
 	}
 });
 
@@ -30,7 +28,7 @@ client.on('warn', (string) => {
 	nl.verbose("Discord.JS Warning", string)
 })
 
-if (configJson.versionInfo.debug == 1) {
+if (configJson.debug == 1) {
 	client.on('debug', (string) => {
 		nl.verbose("Discord.JS Debug", string)
 	})

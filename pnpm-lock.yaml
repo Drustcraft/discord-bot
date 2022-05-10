@@ -3,6 +3,8 @@ lockfileVersion: 5.4
 specifiers:
   '@discordjs/builders': ^0.13.0
   '@discordjs/rest': ^0.4.1
+  ansi-colors: ^4.1.1
+  dayjs: ^1.11.2
   discord-api-types: ^0.31.1
   discord.js: ^13.6.0
   dotenv: ^16.0.0
@@ -12,6 +14,8 @@ specifiers:
 dependencies:
   '@discordjs/builders': 0.13.0
   '@discordjs/rest': 0.4.1
+  ansi-colors: 4.1.1
+  dayjs: 1.11.2
   discord-api-types: 0.31.1
   discord.js: 13.6.0
   dotenv: 16.0.0
@@ -115,6 +119,11 @@ packages:
       negotiator: 0.6.3
     dev: false
 
+  /ansi-colors/4.1.1:
+    resolution: {integrity: sha512-JoX0apGbHaUJBNl6yF+p6JAFYZ666/hhCGKN5t9QFjbJQKUU/g8MNbFDbvfrgKXvI1QpZplPOnwIo99lX/AAmA==}
+    engines: {node: '>=6'}
+    dev: false
+
   /ansi-regex/5.0.1:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
     engines: {node: '>=8'}
@@ -205,6 +214,10 @@ packages:
   /cookie/0.5.0:
     resolution: {integrity: sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==}
     engines: {node: '>= 0.6'}
+    dev: false
+
+  /dayjs/1.11.2:
+    resolution: {integrity: sha512-F4LXf1OeU9hrSYRPTTj/6FbO4HTjPKXvEIC1P2kcnFurViINCVk3ZV0xAS3XVx9MkMsXbbqlK6hjseaYbgKEHw==}
     dev: false
 
   /debug/2.6.9:
