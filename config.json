@@ -67,5 +67,5 @@
 	],
     "version": "1.1.0",
     "debug": 1,
-    "webhookListen": "0.0.0.0:7443"
+    "webhookListen": "localhost:7443"
 }

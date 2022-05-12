@@ -7,21 +7,26 @@ const nl = require("./lib/log");
 const baseCommandModulePath = "./lib/commands/"
 const fs = require("fs");
 const { config } = require('dotenv');
+const dayjs = require("dayjs")
+const af = require('dayjs/plugin/advancedFormat')
+
+// no export modules:
+
+const webhookServer = require("./lib/ingame/webhook")
+
+dayjs.extend(af)
+
+const appStartTime = dayjs().format("x")
+
+nl.info("Main", `Imports loaded.`)
 
 const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS] });
-
-if (configJson.debug == 1) {
-	nl.level = Infinity
-}
 
 nl.heading = "Drustcraft Bot"
 
 client.once('ready', () => {
 	client.user.setActivity('www.drustcraft.com.au', { type: 'WATCHING' });
-	nl.info('Base Bot', `Ready.`);
-	if (configJson.debug == 1) {
-		client.channels.cache.get('963968336847327355').send('Ready, running on development environment!')
-	}
+	nl.info('Main', `Ready after ${dayjs().format("x") - appStartTime}ms.`);
 });
 
 client.on('warn', (string) => {
@@ -46,6 +51,7 @@ client.on('error', (string) => {
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;
 	await interaction.deferReply();
+	nl.verbose('Main', `Got command for ${interaction.commandName}.`);
 	try {
 		if (fs.existsSync(`${baseCommandModulePath}${interaction.commandName}.js`)) {
 			const module = require(`${baseCommandModulePath}${interaction.commandName}.js`)
@@ -55,8 +61,10 @@ client.on('interactionCreate', async interaction => {
 			module.command(interaction)
 		}
 	} catch {
-		interaction.editReply("An error occurred while running this command.\It's most likely because the server is offline.")
+		interaction.editReply("An error occurred while running this command.\It's most likely because the minecraft server is offline.")
 	}
 });
 
 client.login(token);
+
+nl.info('Main', `Registered bot client events after ${dayjs().format("x") - appStartTime}ms, attempting to login.`);
