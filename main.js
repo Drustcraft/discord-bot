@@ -1,4 +1,7 @@
 require('dotenv').config()
+
+if ( process.argv[2] != undefined ) require("./alternateFunctions").run() // running a subcommand.
+
 const Discord = require("discord.js")
 const configJson = require('./config.json');
 const token = process.env.token;
