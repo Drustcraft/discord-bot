@@ -1,8 +1,6 @@
 // Functions that the program shouldn't normally operate in, like clearing the logs directory.
 
-const nl = require("./lib/log");
-
-nl.warn("Alternate Functions Warning", "This log contains ALTERNATE FUNCTIONS LOG DATA, it is recommended to ignore this file (or delete it) as it isn't the regular application log data.\nIf an error occurred during the running of the alternate function, then do check this file for console output.")
+const nl = require("npmlog");
 
 function registerSlashCommands() {
 	require('dotenv').config()
@@ -66,10 +64,18 @@ function registerSlashCommands() {
 }
 
 function run() {
-	if (process.argv[2] == "registerSlashCommands") { registerSlashCommands() }
+	switch (process.argv[2]) {
+		case "registerSlashCommands":
+			registerSlashCommands()
+			break;
+		default:
+			nl.error("Alternate Functions", "Invaild command!")
+	}
+
+	process.exit(1)
 }
 
 
-modules.exports = {
+module.exports = {
 	run: run
 }
