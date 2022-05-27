@@ -4,18 +4,20 @@ const webhook = require("../webhook")
 
 // replaced with the Node HTTP library because express is dead?
 
-const http = require("node:http")
+import http from "node:http"
 
-http.createServer((req, res) => {
+http.createServer((req: http.IncomingMessage, res: http.ServerResponse) => {
 	if (req.method == "PUT") {
 		res.statusCode = 200
 		res.statusMessage = "Sent to Discord Chat"
-		res.end()
+		res.end("Request sent sucessfully.")
 	} else {
 		res.statusCode = 405
 		res.statusMessage = "Must use PUT"
-		res.end("Ingame -> Discord Webhook requires the use of PUT")
+		res.end("Ingame -> Discord Webhook requires the use of PUT.")
 	}
 }).listen(configPort)
 
 nl.info("Ingame Discord Chat Webhook Server", "Online and waiting for requests.")
+
+export default null

@@ -1,26 +1,24 @@
-let nl = require("./../log.js")
-let http = require('http');
+import nl from "./../log"
+import http from "node:http"
 
-function getTextNS(url) {
+function getTextNS(url: string) {
 	nl.http("HttpCondensed", url)
 	return new Promise((resolve, reject) => {
 		http.get(url, (res) => {
 			const { statusCode } = res;
 			const contentType = res.headers['content-type'];
 		  
-			let error;
-			// Any 2xx status code signals a successful response but
-			// here we're only checking for 200.
 			if (statusCode !== 200) {
 				var StatusCodeN200 = new Error(`Status code was ${statusCode} and not 200, probably invaild.`)
 				StatusCodeN200.name = "HttpCondensed"
-				  nl.error("HttpCondensed", StatusCodeN200)
-			}
-			if (error) {
-				nl.error("HttpCondensed", error.message)
-				  // Consume response data to free up memory
-				  res.resume();
-				  return;
+				nl.error("HttpCondensed", StatusCodeN200.name)
+				nl.error("HttpCondensed", StatusCodeN200.message)
+				if (StatusCodeN200.stack != undefined) {
+					nl.error("HttpCondensed", StatusCodeN200.stack)
+				}
+				reject(StatusCodeN200)
+
+				res.resume()
 			}
 		  
 			res.setEncoding('utf8');
@@ -30,13 +28,18 @@ function getTextNS(url) {
 				resolve(rawData)
 			});
 		}).on('error', (e) => {
-			console.error(`Got error: ${e.message}`);
+			nl.error("HttpCondensed", `Got error: ${e.message}`);
 		});
 	})
 }
 
-function getJsonNS(url) {
-	return JSON.parse(getTextNS(url))
+function getJsonNS(url: string) {
+	return new Promise((resolve) => {
+		// string doesn't work.
+		getTextNS(url).then((data: any) => {
+			resolve(JSON.parse(data))
+		})
+	})
 }
 
 module.exports = {

@@ -1,18 +1,24 @@
 // Functions that the program shouldn't normally operate in, like clearing the logs directory.
 
-const nl = require("npmlog");
+import nl from "./lib/log"
+import Builders from '@discordjs/builders';
+import { REST } from '@discordjs/rest';
+import { Routes } from 'discord-api-types/v9';
+import configJson from './../config.json';
+
+nl.warn("Alternative Functions", "This log contains alternative functions log, this is not for the main bot!")
 
 function registerSlashCommands() {
 	require('dotenv').config()
-	const { SlashCommandBuilder } = require('@discordjs/builders');
-	const { REST } = require('@discordjs/rest');
-	const { Routes } = require('discord-api-types/v9');
-	const configJson = require('./config.json');
 	const token = process.env.token;
 	const clientId = process.env.clientId;
 
-	function errorFunc(error) {
-		nl.error("Discord API Down!", error)
+	function errorFunc(error: Error) {
+		nl.error("Alternative Functions", error.name)
+		nl.error("Alternative Functions", error.message)
+		if (error.stack != undefined) {
+			nl.error("Alternative Functions", error.stack)
+		}
 		process.exit(1)
 	}
 
@@ -20,16 +26,14 @@ function registerSlashCommands() {
 
 	nl.info("Welcome!", "Registering Slash Commands...")
 
-	nl.level = Infinity
-
 	let commands = []
 
-	for (i in configJson.commands) {
+	for (const i in configJson.commands) {
 		nl.verbose("Command Table" ,`Regisering command "${configJson.commands[i].name}" with description "${configJson.commands[i].description}".`)
-		commands.push(new SlashCommandBuilder().setName(configJson.commands[i].name).setDescription(configJson.commands[i].description))
+		commands.push(new Builders.SlashCommandBuilder().setName(configJson.commands[i].name).setDescription(configJson.commands[i].description))
 		if (configJson.commands[i].options != undefined) {
 			nl.verbose("Command Table" ,`"${configJson.commands[i].name}" has additional arguments that need to be processed.`)
-			for (v in configJson.commands[i].options) {
+			for (const v in configJson.commands[i].options) {
 				if (configJson.commands[i].options[v].type == 0) {
 					nl.verbose("Command Table" ,`String Argument "${configJson.commands[i].options[v].name}" has a description of "${configJson.commands[i].options[v].description}" and`)
 					if (configJson.commands[i].options[v].required) {
@@ -37,7 +41,7 @@ function registerSlashCommands() {
 					} else {
 						nl.verbose("Command Table" ,`is not required.`)
 					}
-					commands[commands.length - 1].addStringOption(option => option.setName(configJson.commands[i].options[v].name).setDescription(configJson.commands[i].options[v].description).setRequired(configJson.commands[i].options[v].required))
+					commands[commands.length - 1].addStringOption((option: Builders.SlashCommandStringOption) => option.setName(configJson.commands[i].options[v].name).setDescription(configJson.commands[i].options[v].description).setRequired(configJson.commands[i].options[v].required))
 				}
 				if (configJson.commands[i].options[v].type == 1) {
 					nl.verbose("Command Table" ,`Boolean Argument "${configJson.commands[i].options[v].name}" has a description of "${configJson.commands[i].options[v].description}" and`)
@@ -46,7 +50,7 @@ function registerSlashCommands() {
 					} else {
 						nl.verbose("Command Table" ,`is not required.`)
 					}
-					commands[commands.length - 1].addBooleanOption(option => option.setName(configJson.commands[i].options[v].name).setDescription(configJson.commands[i].options[v].description).setRequired(configJson.commands[i].options[v].required))
+					commands[commands.length - 1].addBooleanOption((option: Builders.SlashCommandBooleanOption) => option.setName(configJson.commands[i].options[v].name).setDescription(configJson.commands[i].options[v].description).setRequired(configJson.commands[i].options[v].required))
 				}	
 			}
 		}

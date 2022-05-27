@@ -1,5 +1,5 @@
-const Discord = require("discord.js")
-const debug = require("./../../config.json").debug
+import Discord from "discord.js"
+import { debug } from "./../../../config.json"
 const nl = require("./../log")
 
 let webhookLink
@@ -12,11 +12,11 @@ if (debug == 1) {
 const webhookClient = new Discord.WebhookClient({ url: webhookLink });
 
 if (debug == 1) {
-	webhookClient.on('debug', (string) => {
+	webhookClient.on('debug', (string: string) => {
 		nl.verbose("Discord.JS Webhook Debug", string)
 	})
 	
-	webhookClient.on('apiRequest', (apir) => {
+	webhookClient.on('apiRequest', (apir: Discord.APIRequest) => {
 		nl.verbose("Discord.JS Webhook HTTP", apir.method)
 		nl.verbose("Discord.JS Webhook HTTP", apir.path)
 	})
