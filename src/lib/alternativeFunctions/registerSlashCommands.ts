@@ -1,9 +1,9 @@
 import Builders from '@discordjs/builders';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
-import configJson from '../../config';
+import configJson from '../../config.js';
 import dotenv from 'dotenv'
-import nl from "lib/log"
+import nl from "./../log.js"
 dotenv.config()
 
 function registerSlashCommands() {

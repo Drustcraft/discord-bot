@@ -1,5 +1,5 @@
 const configPort = require("../../../config.json").webhookListen
-const nl = require("../../log")
+const nl = require("../../log.js")
 const webhook = require("../webhook")
 
 // replaced with the Node HTTP library because express is dead?

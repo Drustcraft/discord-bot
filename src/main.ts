@@ -1,13 +1,13 @@
 require('dotenv').config()
 import Discord from "discord.js"
-import configJson from './config'
+import configJson from './config.js'
 const token = process.env.token
-import nl from "./lib/log"
+import nl from "./lib/log.js"
 const baseCommandModulePath = "./lib/commands/"
 import fs from "fs";
 import dayjs from "dayjs"
-import af from 'dayjs/plugin/advancedFormat'
-import webhookServer = require("./lib/ingame/server/api")
+import af from 'dayjs/plugin/advancedFormat.js'
+import webhookServer from "./lib/ingame/server/api.js"
 dayjs.extend(af)
 
 if ( process.argv[2] != undefined ) require("./alternateFunctions").run()

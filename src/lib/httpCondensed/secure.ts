@@ -1,4 +1,4 @@
-import nl from "./../log"
+import nl from "./../log.js"
 import https from "node:https"
 
 function getTextS(url: string) {
@@ -42,7 +42,7 @@ function getJsonS(url: string) {
 	})
 }
 
-module.exports = {
+export default {
 	getJsonS: getJsonS,
 	getTextS: getTextS,
 }

@@ -4,10 +4,11 @@
   "description": "The Drustcraft Bot, written in Javascript.",
   "main": "./dist/main.js",
   "scripts": {
-    "coldStart": "npm install && node regSlashCommands.js && node .",
-    "regsc": "node regSlashCommands.js",
+    "coldStart": "pnpm install --frozen-lockfile true && tsc && node . registerSlashCommands && node .",
+    "regsc": "node . registerSlashCommands",
     "start": "node .",
-    "build": "tsc"
+    "build": "tsc",
+    "rebuild": "tsc && node . registerSlashCommands && node ."
   },
   "author": "[Project HSI] & The Drustcraft Team",
   "license": "SEE LICENSE IN LICENSE",
@@ -24,6 +25,6 @@
   "devDependencies": {
     "@types/node": "^17.0.35",
     "jest": "^28.1.0",
-    "typescript": "^4.6.4"
+    "typescript": "4.7.2"
   }
 }

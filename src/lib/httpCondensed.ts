@@ -1,5 +1,5 @@
-const secure = require("./httpCondensed/secure")
-const insecure = require("./httpCondensed/insecure")
+import secure from "./httpCondensed/secure.js"
+import insecure from "./httpCondensed/insecure.js"
 
 export default {
 	getTextNS: insecure.getTextNS,

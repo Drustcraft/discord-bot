@@ -1,4 +1,4 @@
-import httpCondensed from "lib/httpCondensed"
+import httpCondensed from "./../httpCondensed.js"
 
 const fetch = httpCondensed.getJsonS
 
@@ -22,7 +22,7 @@ class Query {
 	list: Array<playerInterface> | undefined = undefined
 
 	constructor() {
-		fetch("https://www.drustcraft.com.au/api/query").then((data: queryInterface) => {
+		fetch("https://www.drustcraft.com.au/api/query").then((data: any) => {
 			this.list = data.list
 			this.players = parseInt(data.players)
 			this.tps = parseInt(data.tps)
