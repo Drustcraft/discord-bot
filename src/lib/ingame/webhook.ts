@@ -1,5 +1,5 @@
 import Discord from "discord.js"
-import { debug } from "./../../../config.json"
+import { debug } from "../../../config"
 const nl = require("./../log")
 
 let webhookLink

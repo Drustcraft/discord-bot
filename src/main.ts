@@ -1,6 +1,6 @@
 require('dotenv').config()
 import Discord from "discord.js"
-import configJson from './../config.json'
+import configJson from '../config'
 const token = process.env.token
 import nl from "./lib/log"
 const baseCommandModulePath = "./lib/commands/"
