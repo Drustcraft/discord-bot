@@ -10,7 +10,7 @@ function command(interaction: Discord.CommandInteraction) {
 		interaction.editReply(message)
 
 	} else if (ServerQuery.players == 1) {
-
+		//@ts-ignore
 		let message = `There is **1** player online.\nIt is ${ServerQuery.list[0].name}`
 		interaction.editReply(message)
 
@@ -18,11 +18,11 @@ function command(interaction: Discord.CommandInteraction) {
 
 		let message = `There are **${ServerQuery.players}** players online.\nThey are `
 
-		for (i in ServerQuery.list) {
+		for (const i in ServerQuery.list) {
 
-			if (i != 0) {
+			if (i != "0") {
 
-				message += `, ${ServerQuery.list[i].name}`
+				message += `, ${ServerQuery.list[parseInt(i)].name}`
 
 			} else {
 

@@ -9,7 +9,7 @@ interface playerInterface {
 }
 
 interface queryInterface {
-	list: Array<playerInterface>,
+	list: Array<playerInterface> | [],
 	players: string,
 	tps: string,
 	mspt: string
