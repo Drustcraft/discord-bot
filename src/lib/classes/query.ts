@@ -18,7 +18,7 @@ class Query {
 	mspt: number | undefined = undefined
 	players: number | undefined = undefined
 	tps: number | undefined = undefined
-	list: number | undefined = undefined
+	list: Array<playerInterface> | undefined = undefined
 
 	constructor() {
 		// Do nothing as promises are not possible in this context.
