@@ -1,6 +1,6 @@
 require('dotenv').config()
 import Discord from "discord.js"
-import configJson from '../config'
+import configJson from './config'
 const token = process.env.token
 import nl from "./lib/log"
 const baseCommandModulePath = "./lib/commands/"
@@ -29,7 +29,7 @@ client.on('warn', (string: string) => {
 	nl.verbose("Discord.JS Warning", string)
 })
 
-if (configJson.debug == 1) {
+if (configJson.configJson.debug == true) {
 	client.on('debug', (string: string) => {
 		nl.verbose("Discord.JS Debug", string)
 	})

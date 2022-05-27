@@ -1,4 +1,31 @@
-export default {
+enum CommandOptionType {
+	"STRING",
+	"BOOLEAN"
+}
+
+interface CommandOption {
+	name: string,
+	description: string,
+	type: CommandOptionType,
+	required: boolean
+}
+
+interface Command {
+	name: string,
+	description: string,
+	options?: Array<CommandOption>
+}
+
+interface Config {
+	commands: Array<Command>,
+	version: string,
+	debug: boolean,
+	webhookListen: string
+}
+
+// Actual configuration:
+
+const config: Config = {
 	"commands": [
 		{
 			"name": "online",
@@ -65,7 +92,12 @@ export default {
 			]
 		}
 	],
-    "version": "1.1.0",
-    "debug": 1,
+    "version": "1.0.0",
+    "debug": true,
     "webhookListen": "localhost:7443"
+}
+
+export default {
+	configJson: config,
+	CommandOptionType: CommandOptionType
 }

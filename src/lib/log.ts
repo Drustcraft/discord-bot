@@ -2,12 +2,12 @@
 // Extension to npmlog.
 const nl = require("npmlog")
 const fs = require("fs")
-const configJson = require("./../config.json")
+import configJson from "./../config"
 const c = require("ansi-colors")
 const dayjs = require('dayjs')
 const logFile = `./logs/log-${dayjs().unix()}.log`
 
-if (configJson.debug == 1) {
+if (configJson.configJson.debug == true) {
 	nl.level = Infinity
 }
 
@@ -17,14 +17,14 @@ function info(title: string, text: string) {
 }
 
 function verbose(title: string, text: string) {
-	if (configJson.debug == 1) {
+	if (configJson.configJson.debug == true) {
 		nl.verbose(title, text)
 	}
 	appendLog(title ,`Verbose | ${text}`)
 }
 
 function http(title: string, text: string) {
-	if (configJson.debug == 1) {
+	if (configJson.configJson.debug == true) {
 		nl.http(title, text)
 	}
 	appendLog(title, `HTTP | ${text}`)
