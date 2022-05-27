@@ -5,7 +5,7 @@ const { Routes } = require('discord-api-types/v9');
 const configJson = require('./config.json');
 const token = process.env.token;
 const clientId = process.env.clientId;
-const nl = require("npmlog");
+import nl from "$lib/log";
 
 function errorFunc(error) {
 	nl.error("Discord API Down!", error)

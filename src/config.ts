@@ -98,6 +98,6 @@ const config: Config = {
 }
 
 export default {
-	configJson: config,
+	config: config,
 	CommandOptionType: CommandOptionType
 }

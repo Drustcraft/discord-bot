@@ -1,24 +1,30 @@
-const nl = require("npmlog")
+import nl from "lib/log"
 const fetch = require("./../httpCondensed").getJsonS
 
+// Used internally so TypeScript plays nicely with it
+interface IPlayerPre {
+	uuid: string,
+	name: string
+}
+
+
+
 class Player {
-	constructor(playerName) {
-		fetch(`https://www.drustcraft.com.au/api/player?name=${playerName}`).then((data) => {
-			self["uuid"] = data.uuid
-			self["name"] = data.name
-			fetch(`https://www.drustcraft.com.au/api/session?player=${data.uuid}`).then((dataOfPlayer) => {
+	name: string | undefined
+	uuid: string | undefined
+	data: Map<any, any> | undefined
+
+	constructor(playerName: string) {
+		fetch(`https://www.drustcraft.com.au/api/player?name=${playerName}`).then((data: IPlayerPre) => {
+			this.uuid = data.uuid
+			this.name = data.name
+			fetch(`https://www.drustcraft.com.au/api/session?player=${data.uuid}`).then((dataOfPlayer: any) => {
 				this.data = dataOfPlayer.sessions
-				this.data.total_mob_kills = 0;
-				for ([key, value] in Object.entries(this.data.mob_kills)) {
-					this.data.total_mob_kills += value
-				}
 			})
 		})
 	}
 }
 
-module.exports = {
+export default {
 	Player: Player
 }
-
-console.log(new Player)

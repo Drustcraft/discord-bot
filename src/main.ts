@@ -29,7 +29,7 @@ client.on('warn', (string: string) => {
 	nl.verbose("Discord.JS Warning", string)
 })
 
-if (configJson.configJson.debug == true) {
+if (configJson.config.debug == true) {
 	client.on('debug', (string: string) => {
 		nl.verbose("Discord.JS Debug", string)
 	})

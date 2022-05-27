@@ -1,13 +1,11 @@
 import Discord from "discord.js"
 import QueryModule from "./../classes/query"
 
-function command(interaction: Discord.Interaction) {
+function command(interaction: Discord.CommandInteraction) {
 	const ServerQuery = new QueryModule.Query
-	ServerQuery.init().then(() => {
 
-		interaction.editReply(`Evalyn TPS: ${ServerQuery.tps}`)
+	interaction.editReply(`Evalyn TPS: ${ServerQuery.tps}`)
 
-	})
 }
 
 module.exports = {

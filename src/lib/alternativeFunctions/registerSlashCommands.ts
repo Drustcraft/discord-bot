@@ -3,11 +3,13 @@ import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
 import configJson from '../../config';
 import dotenv from 'dotenv'
+import nl from "lib/log"
 dotenv.config()
-const token = process.env.token;
-const clientId = process.env.clientId;
 
 function registerSlashCommands() {
+
+	const token = process.env.token;
+	const clientId = process.env.clientId;
 
 	function errorFunc(error: Error) {
 		nl.error("Alternative Functions", error.name)
@@ -24,51 +26,49 @@ function registerSlashCommands() {
 
 	let commands: Builders.SlashCommandBuilder[] = []
 
-	for (const i in configJson.commands) {
+	for (const i in configJson.config.commands) {
 
-		nl.verbose("Command Table" ,`Regisering command "${configJson.commands[i].name}" with description "${configJson.commands[i].description}".`)
-		commands.push(new Builders.SlashCommandBuilder().setName(configJson.commands[i].name).setDescription(configJson.commands[i].description))
+		let currentCommand = configJson.config.commands[i]
 
-		if (configJson.commands[i].options != undefined) {
-			nl.verbose("Command Table" ,`"${configJson.commands[i].name}" has additional arguments that need to be processed.`)
+		let currentSlashCommandBuilder = new Builders.SlashCommandBuilder().setName(configJson.config.commands[i].name).setDescription(configJson.config.commands[i].description)
 
-			for (const v in configJson.commands[i].options) {
+		if (currentCommand.options != undefined) {
 
-				if (configJson.commands?[i].options?[v].type == 0) {
-					nl.verbose("Command Table" ,`String Argument "${configJson.commands[i].options[v].name}" has a description of "${configJson.commands[i].options[v].description}" and`)
+			for (const v in currentCommand.options) {
 
-					if (configJson.commands[i].options[v].required) {
+				let currentOption = currentCommand.options[v]
+				
+				if (currentOption.type == configJson.CommandOptionType.STRING) {
 
-						nl.verbose("Command Table" ,`is required.`)
-
-					} else {
-
-						nl.verbose("Command Table" ,`is not required.`)
-
-					}
-					commands[commands.length - 1].addStringOption((option: Builders.SlashCommandStringOption) => option.setName(configJson.commands[i].options[v].name).setDescription(configJson.commands[i].options[v].description).setRequired(configJson.commands[i].options[v].required))
+					currentSlashCommandBuilder.addStringOption((option: Builders.SlashCommandStringOption) => {
+						return option.setName(currentOption.name).setDescription(currentOption.description).setRequired(currentOption.required);
+					})
 
 				}
-				if (configJson.commands[i].options?[v].type == 1) {
-					nl.verbose("Command Table" ,`Boolean Argument "${configJson.commands[i].options[v].name}" has a description of "${configJson.commands[i].options[v].description}" and`)
-					if (configJson.commands[i].options[v].required) {
-						nl.verbose("Command Table" ,`is required.`)
-					} else {
-						nl.verbose("Command Table" ,`is not required.`)
-					}
-					commands[commands.length - 1].addBooleanOption((option: Builders.SlashCommandBooleanOption) => option.setName(configJson.commands[i].options[v].name).setDescription(configJson.commands[i].options[v].description).setRequired(configJson.commands[i].options[v].required))
-				}	
+
+				if (currentOption.type == configJson.CommandOptionType.BOOLEAN) {
+
+					currentSlashCommandBuilder.addBooleanOption((option: Builders.SlashCommandBooleanOption) => {
+						return option.setName(currentOption.name).setDescription(currentOption.description).setRequired(currentOption.required);
+					})
+
+				}
+
 			}
 
 		}
+
+		commands.push(currentSlashCommandBuilder)
+
 	}
 
 	commands.map(command => command.toJSON());
 
 	nl.info("Command Table", "Finished, sending to Discord.")
 
+	//@ts-ignore why?
 	const rest = new REST({ version: '9' }).setToken(token);
-
+	//@ts-ignore
 	rest.put(Routes.applicationCommands(clientId), { body: commands })
 		.then(() => nl.info("Complete", 'Successfully registered application commands. Exiting.'))
 		.catch(errorFunc)

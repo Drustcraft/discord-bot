@@ -1,9 +1,10 @@
-const nl = require("npmlog")
-const fetch = require("./../httpCondensed").getJsonS
+import httpCondensed from "lib/httpCondensed"
+
+const fetch = httpCondensed.getJsonS
 
 interface playerInterface {
 	name: string,
-	ping: string,
+	ping: number,
 	player: string
 }
 
@@ -21,11 +22,7 @@ class Query {
 	list: Array<playerInterface> | undefined = undefined
 
 	constructor() {
-		// Do nothing as promises are not possible in this context.
-	}
-
-	async init() {
-		await fetch("https://www.drustcraft.com.au/api/query").then((data: queryInterface) => {
+		fetch("https://www.drustcraft.com.au/api/query").then((data: queryInterface) => {
 			this.list = data.list
 			this.players = parseInt(data.players)
 			this.tps = parseInt(data.tps)

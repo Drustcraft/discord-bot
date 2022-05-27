@@ -1,13 +1,14 @@
 // Output to a log file.
 // Extension to npmlog.
-const nl = require("npmlog")
+import nl from "npmlog"
 const fs = require("fs")
 import configJson from "./../config"
 const c = require("ansi-colors")
 const dayjs = require('dayjs')
 const logFile = `./logs/log-${dayjs().unix()}.log`
 
-if (configJson.configJson.debug == true) {
+if (configJson.config.debug == true) {
+	//@ts-ignore This is possible, hence the ts-ignore.
 	nl.level = Infinity
 }
 
@@ -17,14 +18,14 @@ function info(title: string, text: string) {
 }
 
 function verbose(title: string, text: string) {
-	if (configJson.configJson.debug == true) {
+	if (configJson.config.debug == true) {
 		nl.verbose(title, text)
 	}
 	appendLog(title ,`Verbose | ${text}`)
 }
 
 function http(title: string, text: string) {
-	if (configJson.configJson.debug == true) {
+	if (configJson.config.debug == true) {
 		nl.http(title, text)
 	}
 	appendLog(title, `HTTP | ${text}`)
