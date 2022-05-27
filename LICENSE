@@ -618,12 +618,6 @@ an absolute waiver of all civil liability in connection with the
 Program, unless a warranty or assumption of liability accompanies a
 copy of the Program in return for a fee.
 
-  18. Additional clause for program usage.
-  IF THIS PROGRAM IS NOT USED IN THE PROGRAM IT IS CREATED FOR (Drustcraft)
-THE AUTHOR WILL PROVIDE ABSOLUTELY NO WARRANTY, AND IT SHOULD NOT IMPLIED OR
-EXPRESSED, THE USAGE OF THIS PROGRAM IN OTHER PROGRAMS IS NOT SUPPPORTED
-AND/OR RECOMMENDED.
-
                      END OF TERMS AND CONDITIONS
 
             How to Apply These Terms to Your New Programs
@@ -678,6 +672,3 @@ may consider it more useful to permit linking proprietary applications with
 the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <https://www.gnu.org/licenses/why-not-lgpl.html>.
-
-  This license has been modified to include section 18 for regarding program
-usage in environments other than the enviornment it was designed for.
