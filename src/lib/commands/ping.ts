@@ -15,6 +15,6 @@ function command(interaction: Discord.CommandInteraction) {
 	interaction.editReply(`**${interaction.options.getString('player')}** does not appear to be online.`)
 }
 
-module.exports = {
+export default {
 	command: command
 }

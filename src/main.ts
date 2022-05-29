@@ -11,6 +11,14 @@ import af from 'dayjs/plugin/advancedFormat.js'
 import webhookServer from "./lib/ingame/server/api.js"
 import altFuncs from "./alternateFunctions.js"
 dayjs.extend(af)
+import mspt from "./lib/commands/mspt.js"
+import online from "./lib/commands/online.js"
+import ping from "./lib/commands/ping.js"
+import skill from "./lib/commands/skill.js"
+import status from "./lib/commands/status.js"
+import tps from "./lib/commands/tps.js"
+import value from "./lib/commands/value.js"
+import fallback from "./lib/commands/fallback.js"
 
 if ( process.argv[2] != undefined ) altFuncs.run()
 
@@ -55,15 +63,49 @@ client.on('interactionCreate', async (interaction: Discord.Interaction) => {
 	await interaction.deferReply();
 	nl.verbose('Main', `Got command for ${interaction.commandName}.`);
 	try {
-		if (fs.existsSync(`${baseCommandModulePath}${interaction.commandName}.js`)) {
-			const module = require(`${baseCommandModulePath}${interaction.commandName}.js`)
-			module.command(interaction)
-		} else {
-			const module = require(`${baseCommandModulePath}fallback.js`)
-			module.command(interaction)
+
+		switch (interaction.commandName) {
+			case "online":
+				online.command(interaction)
+				break
+				
+			case "mspt":
+				mspt.command(interaction)
+				break
+				
+			case "status":
+				status.command(interaction)
+				break
+				
+			case "skill":
+				skill.command(interaction)
+				break
+				
+			case "tps":
+				tps.command(interaction)
+				break
+				
+			case "value":
+				value.command(interaction)
+				break
+				
+			case "ping":
+				ping.command(interaction)
+				break
+			
+			default:
+				fallback.command(interaction)
+				break
 		}
-	} catch {
+	
+	} catch(e: any) {
 		interaction.editReply("An error occurred while running this command.\It's most likely because the minecraft server is offline.")
+
+		nl.error("HttpCondensed", e.name)
+		nl.error("HttpCondensed", e.message)
+		if (e.stack != undefined) {
+			nl.error("HttpCondensed", e.stack)
+		}
 	}
 });
 

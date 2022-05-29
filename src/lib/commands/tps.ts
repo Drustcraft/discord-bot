@@ -8,6 +8,6 @@ function command(interaction: Discord.CommandInteraction) {
 
 }
 
-module.exports = {
+export default {
 	command: command
 }

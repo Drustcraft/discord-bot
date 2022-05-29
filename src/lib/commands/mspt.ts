@@ -7,6 +7,6 @@ function command(interaction: Discord.CommandInteraction) {
 	interaction.editReply(`Evalyn MSPT: ${ServerQuery.mspt}ms`)
 }
 
-module.exports = {
+export default {
 	command: command
 }

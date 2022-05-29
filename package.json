@@ -8,7 +8,7 @@
     "regsc": "node --es-module-specifier-resolution=node. registerSlashCommands",
     "start": "node --es-module-specifier-resolution=node . ",
     "build": "tsc",
-    "rebuild": "tsc > ./logs/tsc.log && node --es-module-specifier-resolution=node . registerSlashCommands && node --es-module-specifier-resolution=node ."
+    "rebuild": "tsc > ./logs/tsc.log && node --es-module-specifier-resolution=node ."
   },
   "author": "[Project HSI] & The Drustcraft Team",
   "license": "SEE LICENSE IN LICENSE",

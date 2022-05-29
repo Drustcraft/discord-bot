@@ -27,7 +27,6 @@ class Query {
 			this.players = parseInt(data.players)
 			this.tps = parseInt(data.tps)
 			this.mspt = parseInt(data.mspt)
-			// Return this, emulating Constructor()
 			return this
 		})
 	}
