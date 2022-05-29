@@ -1,4 +1,4 @@
-import Builders from '@discordjs/builders';
+import { SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandStringOption} from '@discordjs/builders';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
 import configJson from '../../config.js';
@@ -24,13 +24,13 @@ function registerSlashCommands() {
 
 	nl.info("Welcome!", "Registering Slash Commands...")
 
-	let commands: Builders.SlashCommandBuilder[] = []
+	let commands: SlashCommandBuilder[] = []
 
 	for (const i in configJson.config.commands) {
 
 		let currentCommand = configJson.config.commands[i]
 
-		let currentSlashCommandBuilder = new Builders.SlashCommandBuilder().setName(configJson.config.commands[i].name).setDescription(configJson.config.commands[i].description)
+		let currentSlashCommandBuilder = new SlashCommandBuilder().setName(configJson.config.commands[i].name).setDescription(configJson.config.commands[i].description)
 
 		if (currentCommand.options != undefined) {
 
@@ -40,7 +40,7 @@ function registerSlashCommands() {
 				
 				if (currentOption.type == configJson.CommandOptionType.STRING) {
 
-					currentSlashCommandBuilder.addStringOption((option: Builders.SlashCommandStringOption) => {
+					currentSlashCommandBuilder.addStringOption((option: SlashCommandStringOption) => {
 						return option.setName(currentOption.name).setDescription(currentOption.description).setRequired(currentOption.required);
 					})
 
@@ -48,7 +48,7 @@ function registerSlashCommands() {
 
 				if (currentOption.type == configJson.CommandOptionType.BOOLEAN) {
 
-					currentSlashCommandBuilder.addBooleanOption((option: Builders.SlashCommandBooleanOption) => {
+					currentSlashCommandBuilder.addBooleanOption((option: SlashCommandBooleanOption) => {
 						return option.setName(currentOption.name).setDescription(currentOption.description).setRequired(currentOption.required);
 					})
 

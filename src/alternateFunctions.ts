@@ -22,6 +22,6 @@ function run() {
 }
 
 
-module.exports = {
+export default {
 	run: run
 }

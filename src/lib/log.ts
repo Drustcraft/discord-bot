@@ -1,10 +1,10 @@
 // Output to a log file.
 // Extension to npmlog.
 import nl from "npmlog"
-const fs = require("fs")
+import fs from "fs"
 import configJson from "./../config.js"
-const c = require("ansi-colors")
-const dayjs = require('dayjs')
+import c from "ansi-colors"
+import dayjs from 'dayjs'
 const logFile = `./logs/log-${dayjs().unix()}.log`
 
 if (configJson.config.debug == true) {
