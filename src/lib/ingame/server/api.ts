@@ -1,23 +1,41 @@
-const configPort = require("../../../config.json").webhookListen
-const nl = require("../../log.js")
-const webhook = require("../webhook")
-
-// replaced with the Node HTTP library because express is dead?
+import configJson from "../../../config"
+const configPort = configJson.config.webhookListen.split(":")[1]
+import nl from "../../log"
+import webhook from "../webhook"
 
 import http from "node:http"
 
-http.createServer((req: http.IncomingMessage, res: http.ServerResponse) => {
-	if (req.method == "PUT") {
-		res.statusCode = 200
-		res.statusMessage = "Sent to Discord Chat"
-		res.end("Request sent sucessfully.")
-	} else {
-		res.statusCode = 405
-		res.statusMessage = "Must use PUT"
-		res.end("Ingame -> Discord Webhook requires the use of PUT.")
-	}
-}).listen(configPort)
+function loadServer() {
+	http.createServer((req: http.IncomingMessage, res: http.ServerResponse) => {
+		if (req.method == "PUT") {
+			let data = ''
+	
+			req.on('data', chunk => {
+				data += chunk
+			});
+	
+			req.on('end', () => {
+				let parsedData = JSON.parse(data)
+				if (typeof parsedData.playerUuid == "string" && typeof parsedData.message == "string") {
+					res.statusCode = 200
+					res.statusMessage = "OK"
+					res.end("Request sent sucessfully.")
 
-nl.info("Ingame Discord Chat Webhook Server", "Online and waiting for requests.")
+					webhook.send(parsedData)
+				} else {
+					res.statusCode = 400
+					res.statusMessage = "Invaild Request"
+					res.end("The message format was not correct.")
+				}
+			});
+		} else {
+			res.statusCode = 405
+			res.statusMessage = "Method not supported."
+			res.end("Ingame -> Discord Webhook requires the use of PUT.")
+		}
+	}).listen(configPort)
 
-export default null
+	nl.info("Ingame Discord Chat Webhook Server", "Online and waiting for requests.")
+}
+
+export default loadServer

@@ -1,15 +1,14 @@
 import { SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandStringOption} from '@discordjs/builders';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
-import configJson from '../../config.js';
-import dotenv from 'dotenv'
-import nl from "./../log.js"
-dotenv.config()
+import configJson from '../../config';
+import configSecrets from "./../../config.secret"
+import nl from "./../log"
 
 function registerSlashCommands() {
 
-	const token = process.env.token;
-	const clientId = process.env.clientId;
+	const token = configSecrets.config.token;
+	const clientId = configSecrets.config.clientId;
 
 	function errorFunc(error: Error) {
 		nl.error("Alternative Functions", error.name)
@@ -66,8 +65,7 @@ function registerSlashCommands() {
 
 	nl.info("Command Table", "Finished, sending to Discord.")
 
-	//@ts-ignore why?
-	const rest = new REST({ version: '9' }).setToken(token);
+	const rest = new REST({ version: '9' }).setToken(configSecrets.config.token);
 	//@ts-ignore
 	rest.put(Routes.applicationCommands(clientId), { body: commands })
 		.then(() => nl.info("Complete", 'Successfully registered application commands. Exiting.'))

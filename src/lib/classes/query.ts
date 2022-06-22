@@ -1,4 +1,4 @@
-import httpCondensed from "./../httpCondensed.js"
+import httpCondensed from "./../httpCondensed"
 
 const fetch = httpCondensed.getJsonS
 

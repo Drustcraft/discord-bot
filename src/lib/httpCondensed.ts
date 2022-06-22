@@ -1,5 +1,5 @@
-import secure from "./httpCondensed/secure.js"
-import insecure from "./httpCondensed/insecure.js"
+import secure from "./httpCondensed/secure"
+import insecure from "./httpCondensed/insecure"
 
 export default {
 	getTextNS: insecure.getTextNS,

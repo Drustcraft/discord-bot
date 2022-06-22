@@ -1,4 +1,4 @@
-import nl from "./../log.js"
+import nl from "./../log"
 import https from "node:https"
 
 function getTextS(url: string) {

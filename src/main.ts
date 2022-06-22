@@ -1,26 +1,25 @@
-import dotenv from "dotenv"
-dotenv.config()
 import Discord from "discord.js"
-import configJson from './config.js'
-const token = process.env.token
-import nl from "./lib/log.js"
-const baseCommandModulePath = "./lib/commands/"
-import fs from "fs";
+import configJson from './config'
+import configSecrets from "./config.secret"
+const token = configSecrets.config.token
+import nl from "./lib/log"
 import dayjs from "dayjs"
 import af from 'dayjs/plugin/advancedFormat.js'
-import webhookServer from "./lib/ingame/server/api.js"
-import altFuncs from "./alternateFunctions.js"
+import webhookServer from "./lib/ingame/server/api"
+import altFuncs from "./alternateFunctions"
 dayjs.extend(af)
-import mspt from "./lib/commands/mspt.js"
-import online from "./lib/commands/online.js"
-import ping from "./lib/commands/ping.js"
-import skill from "./lib/commands/skill.js"
-import status from "./lib/commands/status.js"
-import tps from "./lib/commands/tps.js"
-import value from "./lib/commands/value.js"
-import fallback from "./lib/commands/fallback.js"
+import mspt from "./lib/commands/mspt"
+import online from "./lib/commands/online"
+import ping from "./lib/commands/ping"
+import skill from "./lib/commands/skill"
+import status from "./lib/commands/status"
+import tps from "./lib/commands/tps"
+import value from "./lib/commands/value"
+import fallback from "./lib/commands/fallback"
 
 if ( process.argv[2] != undefined ) altFuncs.run()
+
+webhookServer()
 
 const appStartTime = dayjs().format("x")
 

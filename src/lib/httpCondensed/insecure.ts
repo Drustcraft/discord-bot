@@ -1,4 +1,4 @@
-import nl from "./../log.js"
+import nl from "./../log"
 import http from "node:http"
 
 function getTextNS(url: string) {

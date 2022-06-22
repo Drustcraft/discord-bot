@@ -1,13 +1,10 @@
 import Discord from "discord.js"
-import configJson from "../../config.js"
-const nl = require("./../log.js")
+import configJson from "../../config"
+import nl from "./../log"
+import httpCondensed from "./../httpCondensed"
+import configSecrets from "./../../config.secret"
 
-let webhookLink
-if (configJson.config.debug == true) {
-	webhookLink = `https://discord.com/api/webhooks/${process.env.devCId}/${process.env.devCSecret}`
-} else {
-	webhookLink = `https://discord.com/api/webhooks/${process.env.productionCId}/${process.env.productionCSecret}`
-}
+let webhookLink: string = configSecrets.config.webhookUrl
 
 const webhookClient = new Discord.WebhookClient({ url: webhookLink });
 
@@ -22,13 +19,13 @@ if (configJson.config.debug == true) {
 	})
 }
 
-let testNumber = 0
-
-setInterval(() => {
-	testNumber += 1
-
-	webhookClient.send({
-		content: `test ${testNumber}`
+function send(messageTable: { message: string, playerUuid: string }) {
+	httpCondensed.getJsonS(`https://sessionserver.mojang.com/session/minecraft/profile/${messageTable.playerUuid}`).then((data) => {
+		//@ts-ignore .name will exist
+		webhookClient.send({ content: messageTable.message, avatarURL: `https://minotar.net/helm/${messageTable.playerUuid}/128.png`, username: data.name })
 	})
+}
 
-}, 5000)
+export default {
+	send: send
+}
