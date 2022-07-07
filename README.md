@@ -39,7 +39,7 @@ You may find the following guides helpful:
 
 ## Installation
 
-Once you have installed Node.JS (*and by extension npm*), run this in the console:
+Once you have installed Node.JS (*and by extension npm*), rename config.secret.base.ts inside of the src folder to config.secret.ts and fill in the variables. Then run this in the console:
 
 ```sh
 npm run coldStartStage1 && npm run coldStartStage2
