@@ -16,10 +16,10 @@ interface queryInterface {
 }
 
 class Query {
-	mspt: number | undefined = undefined
-	players: number | undefined = undefined
-	tps: number | undefined = undefined
-	list: Array<playerInterface> | undefined = undefined
+	mspt: number = 0
+	players: number = 0
+	tps: number = 0
+	list: Array<playerInterface> = []
 
 	constructor() {
 		fetch("https://www.drustcraft.com.au/api/query").then((data: any) => {

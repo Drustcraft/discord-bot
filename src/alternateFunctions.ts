@@ -2,9 +2,10 @@
 
 import nl from "./lib/log"
 import regsc from "./lib/alternativeFunctions/registerSlashCommands"
+import process from "node:process"
 
 function registerSlashCommands() {
-	regsc()
+	regsc.regsc()
 }
 
 function run() {
@@ -12,13 +13,13 @@ function run() {
 
 	switch (process.argv[2]) {
 		case "registerSlashCommands":
+			nl.info("Alternative Functions", `Running registerSlashCommand`)
+
 			registerSlashCommands()
 			break;
 		default:
 			nl.error("Alternate Functions", "Invaild command!")
 	}
-
-	process.exit(1)
 }
 
 

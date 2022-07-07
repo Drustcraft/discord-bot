@@ -2,14 +2,15 @@
 // Extension to npmlog.
 import nl from "npmlog"
 import fs from "fs"
-import configJson from "./../config"
+import configJson from "../config"
 import c from "ansi-colors"
 import dayjs from 'dayjs'
-const logFile = `./logs/log-${dayjs().unix()}.log`
+const logFile = `logs/log-${dayjs().unix()}.log`
 
 if (configJson.config.debug == true) {
 	//@ts-ignore This is possible, hence the ts-ignore.
 	nl.level = Infinity
+	warn("Logger", "Debug mode is on, this mode is HIGHLY verbose and is for DEBUGGING ONLY!")
 }
 
 function info(title: string, text: string) {

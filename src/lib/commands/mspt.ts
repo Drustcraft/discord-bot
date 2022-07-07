@@ -4,7 +4,9 @@ import QueryModule from "./../classes/query"
 function command(interaction: Discord.CommandInteraction) {
 	const ServerQuery = new QueryModule.Query()
 
-	interaction.editReply(`Evalyn MSPT: ${ServerQuery.mspt}ms`)
+	setTimeout(() => {
+		interaction.editReply(`Froels MSPT: ${ServerQuery.mspt}ms`)
+	}, 1000)
 }
 
 export default {

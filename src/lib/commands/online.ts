@@ -4,37 +4,42 @@ import QueryModule from "./../classes/query"
 function command(interaction: Discord.CommandInteraction) {
 	const ServerQuery = new QueryModule.Query()
 
-	if (ServerQuery.players == 0) {
+	//quite hacky
 
-		let message = `There are **0** players online.`
-		interaction.editReply(message)
+	setTimeout(() => {
+		if (ServerQuery.players == 0) {
 
-	} else if (ServerQuery.players == 1) {
-		//@ts-ignore
-		let message = `There is **1** player online.\nIt is ${ServerQuery.list[0].name}`
-		interaction.editReply(message)
+			let message = `There are **0** players online.`
+			interaction.editReply(message)
 
-	} else {
+		} else if (ServerQuery.players == 1) {
+			//@ts-ignore
+			let message = `There is **1** player online.\nIt is ${ServerQuery.list[0].name}`
+			interaction.editReply(message)
 
-		let message = `There are **${ServerQuery.players}** players online.\nThey are `
+		} else {
 
-		for (const i in ServerQuery.list) {
+			let message = `There are **${ServerQuery.players}** players online.\nThey are `
 
-			if (i != "0") {
+			for (const i in ServerQuery.list) {
 
-				message += `, ${ServerQuery.list[parseInt(i)].name}`
+				if (i != "0") {
 
-			} else {
+					message += `, ${ServerQuery.list[parseInt(i)].name}`
 
-				message += ServerQuery.list[i].name
+				} else {
+
+					message += ServerQuery.list[i].name
+
+				}
 
 			}
-
-		}
 
 		interaction.editReply(message)
 
 	}
+
+	}, 1000)
 }
 
 export default {

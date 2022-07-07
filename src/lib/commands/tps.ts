@@ -4,7 +4,9 @@ import QueryModule from "./../classes/query"
 function command(interaction: Discord.CommandInteraction) {
 	const ServerQuery = new QueryModule.Query
 
-	interaction.editReply(`Evalyn TPS: ${ServerQuery.tps}`)
+	setInterval(() => {
+		interaction.editReply(`Froels TPS: ${ServerQuery.tps} ticks / second`)
+	}, 1000)
 
 }
 

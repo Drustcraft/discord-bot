@@ -1,23 +1,17 @@
-import { SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandStringOption} from '@discordjs/builders';
+import { SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandChannelOption, SlashCommandUserOption, SlashCommandStringOption, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder} from '@discordjs/builders';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
+import process from 'process';
 import configJson from '../../config';
 import configSecrets from "./../../config.secret"
 import nl from "./../log"
 
-function registerSlashCommands() {
+type SlashCommandBuilders = SlashCommandBuilder | SlashCommandSubcommandBuilder
+
+async function registerSlashCommands() {
 
 	const token = configSecrets.config.token;
 	const clientId = configSecrets.config.clientId;
-
-	function errorFunc(error: Error) {
-		nl.error("Alternative Functions", error.name)
-		nl.error("Alternative Functions", error.message)
-		if (error.stack != undefined) {
-			nl.error("Alternative Functions", error.stack)
-		}
-		process.exit(1)
-	}
 
 	nl.heading = "Drustcraft Bot"
 
@@ -29,47 +23,149 @@ function registerSlashCommands() {
 
 		let currentCommand = configJson.config.commands[i]
 
-		let currentSlashCommandBuilder = new SlashCommandBuilder().setName(configJson.config.commands[i].name).setDescription(configJson.config.commands[i].description)
+		const currentSlashCommandBuilder: SlashCommandBuilder = new SlashCommandBuilder().setName(currentCommand.name).setDescription(currentCommand.description);
 
-		if (currentCommand.options != undefined) {
+		nl.info("Register", `Registering a command with the name "${currentCommand.name}" and description "${currentCommand.description}"...`)
 
-			for (const v in currentCommand.options) {
+		if (currentCommand.type == configJson.CommandType.COMMAND) {
 
-				let currentOption = currentCommand.options[v]
+			nl.info("Register", `Which is a command.`)
+
+			registerCommandBasedOnCommandObject(currentCommand, currentSlashCommandBuilder)
+
+		} else if (currentCommand.type == configJson.CommandType.COMMANDS) {
+
+			for (const v in currentCommand.subcommands) {
+
+				nl.info("Register", `Which is a container for subcommands.`)
 				
-				if (currentOption.type == configJson.CommandOptionType.STRING) {
+				//@ts-ignore
+				let currentSubcommand = currentCommand.subcommands[v]
 
-					currentSlashCommandBuilder.addStringOption((option: SlashCommandStringOption) => {
-						return option.setName(currentOption.name).setDescription(currentOption.description).setRequired(currentOption.required);
-					})
+				let currentSubcommandBuilder = currentSlashCommandBuilder.addSubcommand((subcommand: SlashCommandSubcommandBuilder) => {
+					subcommand.setName(currentSubcommand.name).setDescription(currentSubcommand.description)
 
-				}
+					registerOptionsForCommand(currentSubcommand, subcommand)
 
-				if (currentOption.type == configJson.CommandOptionType.BOOLEAN) {
+					return subcommand
 
-					currentSlashCommandBuilder.addBooleanOption((option: SlashCommandBooleanOption) => {
-						return option.setName(currentOption.name).setDescription(currentOption.description).setRequired(currentOption.required);
-					})
+				})
 
-				}
+			}
+
+		} else if (currentCommand.type == configJson.CommandType.SCGROUP) {
+
+			nl.info("Register", `Which is a container for subcommand groups.`)
+
+			for (const v in currentCommand.subcommandgroups) {
+
+				//@ts-ignore
+				let currentSubcommandGroup = currentCommand.subcommandgroups[v]
+
+				currentSlashCommandBuilder.addSubcommandGroup((scgroup: SlashCommandSubcommandGroupBuilder) => {
+
+					nl.info("Register", `Registering a subcommand group with the name "${currentSubcommandGroup.name}" and description "${currentSubcommandGroup.description}" under "${currentCommand.name}".`)
+					
+					scgroup.setName(currentSubcommandGroup.name).setDescription(currentSubcommandGroup.description)
+
+					for (const f in currentSubcommandGroup.subcommands) {
+						
+						let currentSubcommand = currentSubcommandGroup.subcommands[f]
+
+						nl.info("Register", `Registering a subcommand with the name "${currentSubcommand.name}" and description "${currentSubcommand.description}" under group "${currentSubcommandGroup.name}" which is under "${currentCommand.name}".`)
+
+						scgroup.addSubcommand((subcommand: SlashCommandSubcommandBuilder) => {
+
+							subcommand.setName(currentSubcommand.name).setDescription(currentSubcommand.description)
+
+							registerOptionsForCommand(currentSubcommand, subcommand)
+
+							return subcommand
+
+						})
+
+					}
+
+					return scgroup
+
+				})
 
 			}
 
 		}
 
 		commands.push(currentSlashCommandBuilder)
-
+		
 	}
 
-	commands.map(command => command.toJSON());
+	commands.map(command => command.toJSON())
 
 	nl.info("Command Table", "Finished, sending to Discord.")
 
-	const rest = new REST({ version: '9' }).setToken(configSecrets.config.token);
-	//@ts-ignore
-	rest.put(Routes.applicationCommands(clientId), { body: commands })
-		.then(() => nl.info("Complete", 'Successfully registered application commands. Exiting.'))
-		.catch(errorFunc)
+	nl.verbose("Command Table", JSON.stringify(commands))
+
+	const rest = new REST({ version: '9' }).setToken(configSecrets.config.token)
+	await rest.put(
+		Routes.applicationCommands(clientId),
+		{ body: commands },
+	)
+
+	nl.info("Complete", 'Successfully registered application commands. Exiting.')
+	process.exit(0)
 }
 
-export default registerSlashCommands
+function registerCommandBasedOnCommandObject(currentCommand: any, builder: SlashCommandBuilders) {
+
+	if (currentCommand.options != undefined) {
+
+		registerOptionsForCommand(currentCommand, builder)
+
+	}
+
+	return builder
+
+}
+
+function registerOptionsForCommand(currentCommand: any, builder: SlashCommandBuilders) {
+
+	nl.info("Register", `Registering options for "${currentCommand.name}"`)
+	
+	for (const v in currentCommand.options) {
+
+		let currentOption = currentCommand.options[v]
+
+		nl.info("Register", `Registering an option with name "${currentOption.name}" and description "${currentOption.description}" under the command "${currentCommand.name}"...`)
+		
+		if (currentOption.type == configJson.CommandOptionType.STRING) {
+
+			nl.info("Register", `Which is a string.`)
+
+			builder.addStringOption((option: SlashCommandStringOption) => {
+				return option.setName(currentOption.name).setDescription(currentOption.description).setRequired(currentOption.required);
+			})
+
+		} else if (currentOption.type == configJson.CommandOptionType.BOOLEAN) {
+
+			nl.info("Register", `Which is a boolean.`)
+
+			builder.addBooleanOption((option: SlashCommandBooleanOption) => {
+				return option.setName(currentOption.name).setDescription(currentOption.description).setRequired(currentOption.required);
+			})
+
+		} else if (currentOption.type == configJson.CommandOptionType.USER) {
+
+			nl.info("Register", `Which is a user.`)
+
+			builder.addUserOption((option: SlashCommandUserOption) => {
+				return option.setName(currentOption.name).setDescription(currentOption.description).setRequired(currentOption.required);
+			})
+
+		}
+
+	}
+
+	return builder
+
+}
+
+export default { regsc: registerSlashCommands }
