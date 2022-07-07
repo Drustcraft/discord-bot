@@ -25,6 +25,8 @@ jobs:
       - uses: actions/setup-node@v3.3.0
         with:
           node-version: 18.4.0
+      
+      - run: mkdir logs
           
       - run: npm run coldStartStage1
       - run: npm run coldStartStage2
