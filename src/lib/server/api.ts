@@ -6,14 +6,11 @@ import webhook from "../ingame/webhook"
 import http from "node:http"
 import flags from "./../flags/flags"
 import { ChannelType } from "discord-api-types/v10"
-import configSecret from "../../config.secret"
 import Discord from "discord.js"
 
-let botClient = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS] })
-botClient.login(configSecret.config.token)
-
 import utils from "./../utils"
-import { channel } from "node:diagnostics_channel"
+
+let botClient = utils.client
 
 interface APIFunctionReturn {
 	status: {
@@ -46,14 +43,15 @@ async function chatInGameToWebhook(postData: { playerUuid: string; message: stri
 
 async function createRegion(postData: { type: string; name: string }): Promise<APIFunctionReturn> {
 	if (postData.type == "workshop") {
-		let role:any = utils.createRoleForWorkshop(postData.name)
+		let role:any = await utils.createRoleForWorkshop(postData.name)
 
 		let channel: any = await botClient.guilds.cache.get(configSecret.config.guildId)?.channels.create(`${postData.name}-workshop`, { type: "GUILD_TEXT" })
-		await utils.createCategoryIfItDoesntExist("Workshops")
-		channel.setParent(botClient.guilds.cache.get(configSecret.config.guildId)?.channels.cache.find(channel => channel.name === "Workshops"))
-		channel.permissionOverwrites.create(channel.guild.roles.everyone, { VIEW_CHANNEL: false })
 
-		channel.permissionOverwrites.create(role, { VIEW_CHANNEL: true })
+		await utils.createCategoryIfItDoesntExist("Workshops")
+		utils.moveChannel(`${postData.name}-workshop`, `Workshops`)
+		await channel.permissionOverwrites.create(channel.guild.roles.everyone, { VIEW_CHANNEL: false })
+
+		await channel.permissionOverwrites.create(role, { VIEW_CHANNEL: true })
 
 		return {
 			status: {
@@ -75,15 +73,15 @@ async function createRegion(postData: { type: string; name: string }): Promise<A
 
 async function deleteRegion(postData: { type:string; name: string }): Promise<APIFunctionReturn> {
 	if (postData.type == "workshop") {
-		// spliting this up to make it more readable
 		let guild: any = await botClient.guilds.cache.get(configSecret.config.guildId)
-		let roleToDelete: any  = await guild.roles.cache.find((role: { name: string }) => role.name === `${postData.name} workshop`).delete()
+		await guild.roles.cache.find((role: { name: string }) => role.name === `${postData.name} workshop`).delete()
+
 		await utils.createCategoryIfItDoesntExist("Archived")
-		//@ts-ignore
-		let channel: Discord.TextChannel = await botClient.guilds.cache.find(channel => channel.name == `${name}-workshop`)
-		//@ts-ignore
-		channel.setParent(botClient.guilds.cache.get(configSecret.config.guildId)?.channels.cache.find(channel => channel.name === "Archived"))
+
+		let channel: any = botClient.guilds.cache.get(configSecret.config.guildId)?.channels.cache.find(channel => channel.name === `${postData.name}-workshop` )
+		utils.moveChannel(`${postData.name}-workshop`, `Archived`)
 		channel.permissionOverwrites.create(channel.guild.roles.everyone, { VIEW_CHANNEL: true })
+
 		return {
 			status: {
 				statusCode: 200,

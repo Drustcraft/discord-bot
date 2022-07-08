@@ -7,6 +7,7 @@ import dayjs from "dayjs"
 import af from 'dayjs/plugin/advancedFormat'
 import server from "./lib/server/api"
 import altFuncs from "./lib/alternateFunctions"
+import utils from "./lib/utils"
 dayjs.extend(af)
 
 if ( process.argv[2] != undefined ) { altFuncs.run() } else {
@@ -20,29 +21,29 @@ if ( process.argv[2] != undefined ) { altFuncs.run() } else {
 	server()
 	nl.info("Main", `Called.`)
 
-	const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS] })
+	const client = utils.client
 
-	client.once('ready', () => {
-		client.user?.setActivity('www.drustcraft.com.au', { type: 'WATCHING' })
+	utils.client.once('ready', () => {
+		utils.client.user?.setActivity('www.drustcraft.com.au', { type: 'WATCHING' })
 		nl.info('Main', `Ready after ${parseInt(dayjs().format("x")) - parseInt(appStartTime)}ms.`)
 	});
 
-	client.on('warn', (string: string) => {
+	utils.client.on('warn', (string: string) => {
 		nl.verbose("Discord.JS Warning", string)
 	})
 
 	if (configJson.config.debug == true) {
-		client.on('debug', (string: string) => {
+		utils.client.on('debug', (string: string) => {
 			nl.verbose("Discord.JS Debug", string)
 		})
 	
-		client.on('apiRequest', (apir: Discord.APIRequest) => {
+		utils.client.on('apiRequest', (apir: Discord.APIRequest) => {
 			nl.verbose("Discord.JS HTTP", apir.method)
 			nl.verbose("Discord.JS HTTP", apir.path)
 		})
 	}
 
-	client.on('error', (error: Error) => {
+	utils.client.on('error', (error: Error) => {
 		nl.error("Discord.JS Error", error.name)
 		nl.error("Discord.JS Error", error.message)
 		if (error.stack != undefined) {
@@ -50,7 +51,7 @@ if ( process.argv[2] != undefined ) { altFuncs.run() } else {
 		}
 	})
 
-	client.on('interactionCreate', async (interaction: Discord.Interaction) => {
+	utils.client.on('interactionCreate', async (interaction: Discord.Interaction) => {
 		if (!interaction.isCommand()) return;
 		await interaction.deferReply();
 		nl.verbose('Main', `Got command for ${interaction.commandName}.`);
@@ -74,6 +75,6 @@ if ( process.argv[2] != undefined ) { altFuncs.run() } else {
 
 	nl.info('Main', `Registered bot client events after ${parseInt(dayjs().format("x")) - parseInt(appStartTime)}ms, attempting to login.`);
 
-	client.login(token);
+	utils.client.login(token);
 
 }
