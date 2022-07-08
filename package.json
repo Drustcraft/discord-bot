@@ -4,7 +4,7 @@
   "description": "The Drustcraft Bot, written in Javascript.",
   "main": "./dist/main.js",
   "scripts": {
-    "coldStartStage1": "npm ci && tsc && cp ./src/flags.json ./dist && echo Please run 'npm run coldStartStage2' to continue to the next stage of the cold start.",
+    "coldStartStage1": "mkdir dist && mkdir logs && npm ci && tsc && cp ./src/flags.json ./dist && echo Please run 'npm run coldStartStage2' to continue to the next stage of the cold start.",
 	"coldStartStage2": "node --es-module-specifier-resolution=node . registerSlashCommands && node --es-module-specifier-resolution=node .",
     "regsc": "node --es-module-specifier-resolution=node . registerSlashCommands",
     "start": "node --es-module-specifier-resolution=node . ",
