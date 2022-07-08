@@ -6,7 +6,7 @@ import nl from "./lib/log"
 import dayjs from "dayjs"
 import af from 'dayjs/plugin/advancedFormat'
 import server from "./lib/server/api"
-import altFuncs from "./alternateFunctions"
+import altFuncs from "./lib/alternateFunctions"
 dayjs.extend(af)
 
 if ( process.argv[2] != undefined ) { altFuncs.run() } else {

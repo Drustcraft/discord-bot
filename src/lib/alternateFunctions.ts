@@ -1,7 +1,7 @@
 // Functions that the program shouldn't normally operate in, like clearing the logs directory.
 
-import nl from "./lib/log"
-import regsc from "./lib/alternativeFunctions/registerSlashCommands"
+import nl from "./log"
+import regsc from "./alternativeFunctions/registerSlashCommands"
 import process from "node:process"
 
 function registerSlashCommands() {
