@@ -29,13 +29,13 @@ Visit the [Step by Step Guide in Contributing to Drustcraft](https://github.com/
 
 - [Node.JS v18.4.0](https://nodejs.org)
 
-**Other versions may not work correctly**
+Other versions may not work correctly (or even compile)
 
 ## Support
 
 You may find the following guides helpful:
 
-* [Drustcraft Discord](https://drustcraft.gg/discord) - Official Drustcraft Discord using the `#development` channel
+- [Drustcraft Discord](https://drustcraft.gg/discord) - Official Drustcraft Discord using the `#development` channel
 
 ## Installation
 
@@ -55,7 +55,8 @@ If you are upgrading, you need to do the first script again.
 
 ## API Documentation
 
-/ingame: PUT
+### /ingame: PUT
+
 Body:
 
 ```json
@@ -65,7 +66,8 @@ Body:
 }
 ```
 
-/region_create: POST
+### /region_create: POST
+
 Body:
 
 ```json
@@ -75,7 +77,8 @@ Body:
 }
 ```
 
-/region_delete: DELETE
+### /region_delete: DELETE
+
 Body:
 
 ```json
