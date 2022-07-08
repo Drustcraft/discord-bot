@@ -52,3 +52,35 @@ npm run start
 ```
 
 If you are upgrading, you need to do the first script again.
+
+## API Documentation
+
+/ingame: PUT
+Body:
+
+```json
+{
+ "message": "the message that the player sent",
+ "playerUuid": "the uuid of the player that sent the message"
+}
+```
+
+/region_create: POST
+Body:
+
+```json
+{
+ "name": "the name of the region/workshop",
+ "type": "workshop" // This must be set to workshop for the workshop to be created on the guild.
+}
+```
+
+/region_delete: DELETE
+Body:
+
+```json
+{
+ "name": "the name of the region/workshop",
+ "type": "workshop" // This must be set to workshop for the workshop to be deleted.
+}
+```
